@@ -1,0 +1,244 @@
+\documentclass[border=5mm, convert, usenames, dvipsnames,beamer]{standalone}
+\usetheme{Madrid}
+\usecolortheme{default}
+%Information to be included in the title page:
+\title{Sample title}
+\author{Anonymous}
+\institute{Overleaf}
+\date{2021}
+
+\usepackage[absolute,overlay]{textpos}
+
+\defbeamertemplate*{frametitle}{}[1][]
+{
+    \begin{textblock*}{12cm}(1cm,0.75cm)
+    {\color{purple} \fontsize{20}{43.2} \selectfont \insertframetitle}
+    \end{textblock*}
+    \begin{textblock*}{12cm}(1cm,2.5cm)
+    {\color{purple} \fontsize{20}{24} \selectfont \insertframesubtitle}
+    \end{textblock*}
+}
+
+
+
+\setbeamertemplate{footline}[frame number]
+\usepackage{ragged2e}
+
+\justifying
+\usepackage{lmodern}
+\usepackage{ImageMagick}
+\usepackage[utf8] {inputenc}
+\usefonttheme[onlymath]{serif}
+\usepackage[english] {label}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage[round] {natbib}
+\usepackage{color}     
+\usepackage{changepage}
+\usepackage[export]{adjustbox}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{listings}
+\usepackage[svgnames]{xcolor}
+
+
+
+\lstdefinestyle{R} {language=R,
+    stringstyle=\color{DarkGreen},
+    morekeywords={TRUE,FALSE},
+    deletekeywords={data,frame,length,as,character},
+    keywordstyle=\color{blue},
+    commentstyle=\color{teal},    
+    basicstyle=\ttfamily\tiny,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{Python} {language=Python,
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\tiny,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2}
+
+
+\makeatletter
+\setbeamertemplate{frametitle}[default]{}
+\makeatother
+\usepackage{booktabs}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+
+\begin{document}
+
+\begin{frame}
+\frametitle{Binomial and Poisson distributions: \\ rationale}
+
+\vspace{55}
+\noindent
+The Binomial distribution is used to model the number of successes occuring in $n$ independent Bernoulli trials. The Poisson distribution is used to model a phenomenon that represents the count of events in a fixed time interval (or space unit). The r.v. $X$ represents then the number of successes in this interval.
+
+
+\vspace{10}
+\noindent
+Suppose that $\lambda$ denotes the number of independent observations of an event over a given time interval. If we divide this interval into $n$ smaller intervals, then we find $ p = \frac{\lambda}{n} \Leftrightarrow \lambda = np$, the probability of observing a success over a time interval $n$ times smaller. Conditions for a Poisson approximation to the Binomial distribution:
+
+\vspace{5}
+$$
+\begin{align*}
+& (i) \ \ \ \ \ \  n  \text{  is large} \\
+& (ii) \ \ \ \ \  n * p \text{  is small enough} \\
+\end{align}
+$$
+\par
+\end{frame}
+
+
+\begin{frame}[ fragile]{}
+
+\frametitle{Poisson distribution as an asymptotic\\
+ case of the Binomial distribution}
+
+\footnotesize
+\vspace{55}
+\noindent
+$$
+\begin{align*} 
+ P(X=x) & = \binom{n}{x} p^{x} (1-p)^{n-x}\\
+&  = \binom{n}{x} \bigg( \frac{\lambda}{n} \bigg)^{x}  \bigg(1-\frac{\lambda}{n} \bigg)^{n-x}\\
+&  = \binom{n}{x} \frac{\lambda^{x}}{n^{x}} \bigg(1-\frac{\lambda}{n} \bigg)^{n}  \bigg(1-\frac{\lambda}{n} \bigg)^{-x}\\
+& = \frac{n (n-1)...(n-x+1)}{x!} \frac{\lambda^{x}}{n^x} \bigg(1-\frac{\lambda}{n} \bigg)^{n}  \bigg(1-\frac{\lambda}{n} \bigg)^{-x}\\
+&  = \frac{n (n-1)...(n-x+1)}{n^x} \frac{\lambda^{x}}{x!} \bigg(1-\frac{\lambda}{n} \bigg)^{n}  \bigg(1-\frac{\lambda}{n} \bigg)^{-x}\\
+&  = \underbrace{1 \bigg( 1- \frac{1}{n} \bigg) \bigg( 1- \frac{2}{n} \bigg) ... \bigg( 1- \frac{x-1}{n} \bigg) }_{\approx 1} \frac{\lambda^{x}}{x!} \underbrace{\bigg(1-\frac{\lambda}{n} \bigg)^{n}}_{\approx e^{-\lambda}}  \bigg(1-\underbrace{\frac{\lambda}{n}}_{\approx 0} \bigg)^{-x}\\
+& \approx  \frac{\lambda^{x}}{x!} e^{-\lambda} \ \ \ \ \ \ \  \ \ \ \text{as $n \to \infty$}
+\end{align*}
+$$
+
+\end{frame}
+
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Example of application}
+
+\vspace{30}
+\noindent
+A machine tool produces $20,000$ pieces a day. The probability of one piece being defective is $0.1\%$. The probability that this machine produces exactly $20$ defective pieces is given by the Binomial distribution and equals $f_{X}(20)= P(X=20) = \binom{20000}{20} \ \ 0.001^{20} \ \ 0.999^{20 000-20} = 0.0889.$
+
+
+\normalsize
+
+\vspace{10}
+\noindent
+In the R programming language:
+\begin{lstlisting}[style=
+R]
+dbinom(x = 20, size = 20000, prob = 0.001)
+[1] 0.08887977
+\end{lstlisting}
+
+\vspace{5}
+\noindent
+In the Python language:
+\begin{lstlisting}[style=Python]
+from scipy.stats import binom
+binom.pmf(20, n = 20000, p = 0.001)
+0.08887976802110753
+\end{lstlisting}
+
+\par
+
+\end{frame}
+
+\begin{frame}[ fragile]{}
+
+\frametitle{Poisson approximation}
+
+
+\vspace{40}
+\noindent
+A machine tool produces $20,000$ pieces a day. The probability of one piece being defective is $0.1 \%$. The probability that this machine produces exactly $20$ defective pieces can be approximated by a Poisson distribution. If we let $\lambda = np$, that is, in our example $\lambda = 20000*0.001 = 20$, we can thus write $f_{X}(20)= P(X=20) = \frac{20^{20} e^{-20}}{20!} = 0.0888.$
+
+
+\vspace{10}
+\noindent
+In the R programming language:
+\begin{lstlisting}[style=R]
+dpois(x = 20, lambda = 20000*0.001)
+[1] 0.08883532
+\end{lstlisting}
+
+\vspace{5}
+\noindent
+In the Python language:
+\begin{lstlisting}[style=Python]
+from scipy.stats import poisson
+poisson.pmf(20, mu = 20000*0.001)
+0.0888353173920848
+\end{lstlisting}
+
+\end{frame}
+
+
+
+
+
+
+
+\begin{frame}[ fragile]{}
+
+\frametitle{References}
+
+\vspace{30}
+\noindent
+Rizzo, M.L. (2019). Statistical Computing with R, Second Edition (2nd ed.). Chapman and Hall/CRC. \\
+https://doi.org/10.1201/9780429192760
+
+\vspace{10}
+\noindent
+The R Project for Statistical Computing:
+
+\noindent
+\urlf{https://www.r-project.org/}
+
+\vspace{10}
+\noindent
+Python:
+
+\noindent
+\urlf{https://www.python.org/}
+
+
+\vspace{10}
+\noindent
+course notes
+
+\end{frame}
+
+\end{document}
